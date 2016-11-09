@@ -4,8 +4,8 @@ module Playwright
       @scenes ||= []
     end
 
-    def add_scene(from, to)
-      scenes << Scene.new(from, to)
+    def add_scene(sender, receiver)
+      scenes << Scene.new(sender, receiver)
     end
   end
 end

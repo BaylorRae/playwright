@@ -1,4 +1,4 @@
 module Playwright
-  class Scene < Struct.new(:from, :to)
+  class Scene < Struct.new(:sender, :receiver)
   end
 end
