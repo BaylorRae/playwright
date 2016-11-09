@@ -5,6 +5,7 @@ module Playwright
 
     class ExampleStage < Stage
       prop_collection :shoes
+      prop_collection :pets, proc { |a, b| a.name == b.name }
     end
 
     subject { ExampleStage.new }
@@ -26,6 +27,10 @@ module Playwright
     context "prop_collection" do
       it "creates a prop collection" do
         expect(subject.shoes.class).to eq(Props)
+      end
+
+      it "assigns a custom query" do
+        expect(subject.pets.include_query).to_not be_nil
       end
     end
 

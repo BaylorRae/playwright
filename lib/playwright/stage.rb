@@ -8,9 +8,11 @@ module Playwright
       scenes << Scene.new(sender, receiver)
     end
 
-    def self.prop_collection(name)
+    def self.prop_collection(name, query = nil)
       define_method name do
-        Props.new
+        props = Props.new
+        props.include_query = query
+        props
       end
     end
   end
