@@ -18,6 +18,40 @@ generally more than one action in a test.
 An `Actor` will likely be a user in your system but it can be anything that
 interacts another object type.
 
+## Example
+
+Let's imagine we have an platform with **sellers**, **buyers** and **fulfillment
+agencies**. We need to create a test around fulfilling an order. You can teach
+Playwright how to group actors together as **buyer** will only interact with
+**seller** and **seller** will only interact with the **fulfillment agency**.
+
+With Playwright you can build the entire `Stage` with all the expected `Scene`s
+by simply providing the initial actor, which in this case is the **buyer**.
+
+```ruby
+stage = FulfillmentStage.new(:buyer)
+
+stage.scenes  #=> [Scene(Buyer -> Seller), Scene(Seller -> FulfillmentAgency)]
+stage.buyer   #=> Buyer
+stage.seller  #=> Seller
+stage.fulfillment_agency #=> FulfillmentAgency
+
+stage.products #=> [Product, Product, ...]
+```
+
+The above code example is defined from the following.
+
+```ruby
+class FulfillmentStage < Playwright::Stage
+  scenes do
+    actor :buyer, to: :seller
+    actor :seller, to: :fulfillment_agency
+  end
+
+  prop_collection :products, proc { |p1, p2| p1.id == p2.id }
+end
+```
+
 ## Installation
 
 Add this line to your application's Gemfile:
