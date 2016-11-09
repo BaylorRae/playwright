@@ -12,6 +12,5 @@ module Playwright
     def include_from_query?(item)
       include_query && self.any? { |v| include_query.call(v, item) }
     end
-
   end
 end
