@@ -1,8 +1,22 @@
 # Playwright
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/playwright`. To experiment with that code, run `bin/console` for an interactive prompt.
+Playwright is a foundational piece for building a test framework. It allows
+test cases to be written as a play with all the moving parts to be categorized
+as a `Stage`, `Scene`, `Props` or `Actor`.
 
-TODO: Delete this and the text above, and describe your gem
+### What are `Stage`, `Scene` or `Actor`?
+
+Each test contains a single `Stage` which encapsulates one or many `Scene`s and
+`Props`. There should only be one stage created in a test as it is the context
+that everything should go through.
+
+Once you have a `Stage` the next step is to create the `Scene`s that help build
+the test or "story". A `Scene` groups two `Actor`s together that will
+"interact" as the test runs. A `Stage` has multiple `Scene`s as there are
+generally more than one action in a test.
+
+An `Actor` will likely be a user in your system but it can be anything that
+interacts another object type.
 
 ## Installation
 
