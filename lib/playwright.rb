@@ -1,5 +1,5 @@
 require "playwright/version"
 
 module Playwright
-  # Your code goes here...
+  autoload :Stage, "playwright/stage"
 end
