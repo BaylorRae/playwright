@@ -48,7 +48,7 @@ class FulfillmentStage < Playwright::Stage
     actor :seller, to: :fulfillment_agency
   end
 
-  prop_collection :products, proc { |p1, p2| p1.id == p2.id }
+  prop_collection(:products) { |p| p.id }
 end
 ```
 
