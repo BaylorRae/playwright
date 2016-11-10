@@ -11,9 +11,8 @@ module Playwright
       let(:users) { [double(:bob, name: "bob"), double(:alice, name: "alice"), double(:leo, name: "leo")] }
 
       let :user_props do
-        props = Props.new
+        props = Props.new -> (u) { u.name }
         users.each { |u| props << u }
-        props.include_query = -> (u) { u.name }
         props
       end
 

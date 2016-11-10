@@ -10,8 +10,7 @@ module Playwright
 
     def self.prop_collection(name, &block)
       define_method name do
-        props = Props.new
-        props.include_query = block
+        props = Props.new(block)
         props
       end
     end
