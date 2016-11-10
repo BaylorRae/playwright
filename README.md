@@ -11,9 +11,10 @@ Each test contains a single `Stage` which encapsulates one or many `Scene`s and
 that everything should go through.
 
 Once you have a `Stage` the next step is to create the `Scene`s that help build
-the test or "story". A `Scene` groups two `Actor`s together that will
-"interact" as the test runs. A `Stage` has multiple `Scene`s as there are
-generally more than one action in a test.
+the test or "story". A `Scene` is a service layer between your test and page
+object models. It also groups two `Actor`s together that will "interact" as the
+test runs. A `Stage` has multiple `Scene`s as there are generally more than one
+action in a test.
 
 An `Actor` will likely be a user in your system but it can be anything that
 interacts another object type.
@@ -46,6 +47,7 @@ stage.fulfillment_agency #=> FulfillmentAgency
 # props
 stage.products #=> [Product, Product, ...]
 stage.orders #=> [Order, Order, ...]
+stage.fulfillments #=> [OrderFulfillment, OrderFulfillment, ...]
 ```
 
 The above code example is defined from the following.
@@ -65,6 +67,31 @@ class FulfillmentStage < Playwright::Stage
 
   prop_collection(:products) { |p| p.id }
   prop_collection(:orders) { |o| o.invoice_number }
+  prop_collection(:fulfillments) { |f| f.id }
+end
+
+class PurchaseProduct < Playwright::Scene
+  sender_accessor :buyer
+
+  def purchase_product(product)
+    LoginHelper.login_as(buyer)
+    ProductPage.purchase(product.id)
+    stage.orders.find_or_add(product.orders.last)
+  end
+end
+
+class FulfillOrder < Playwright::Scene
+  sender_accessor :seller
+  receiver_accessor :fulfillment_agency
+
+  def fulfill(order)
+    LoginHelper.login_as(seller)
+    OrderPage.fulfill_order(order.invoice_number)
+
+    LoginHelper.login_as(fulfillment_agency)
+    FulfillmentPage.ship_order(order.invoice_number)
+    stage.fulfillments.find_or_add(order.fulfillments.last)
+  end
 end
 ```
 
