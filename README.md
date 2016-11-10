@@ -31,11 +31,19 @@ by simply providing the initial actor, which in this case is the **buyer**.
 ```ruby
 stage = FulfillmentStage.new(:buyer)
 
-stage.scenes  #=> [Scene(Buyer -> Seller), Scene(Seller -> FulfillmentAgency)]
-stage.buyer   #=> Buyer
-stage.seller  #=> Seller
+# scenes
+stage.scenes  #=> [Scene(:purchase_product), Scene(:fulfill_order)]
+stage.current_scene #=> Scene(:purchase_product)
+stage.fulfill_order!
+stage.current_scene #=> Scene(:fulfill_order)
+
+# actors
+stage.actors #=> [:buyer, :seller, :fulfillment_agency]
+stage.buyer   #=> User(username: 'buyer')
+stage.seller  #=> User(username: 'seller')
 stage.fulfillment_agency #=> FulfillmentAgency
 
+# props
 stage.products #=> [Product, Product, ...]
 ```
 
@@ -43,12 +51,19 @@ The above code example is defined from the following.
 
 ```ruby
 class FulfillmentStage < Playwright::Stage
+  actors do
+    actor(:buyer)   { User.find_by(username: 'buyer') }
+    actor(:seller)  { User.find_by(username: 'seller') }
+    actor(:fulfillment_agency) { FulfillmentAgency.find_by(name: 'agency-1') }
+  end
+
   scenes do
-    actor :buyer, to: :seller
-    actor :seller, to: :fulfillment_agency
+    scene :purchase_product, from: :buyer, to: :seller
+    scene :fulfill_order, from: :seller, to: :fulfillment_agency
   end
 
   prop_collection(:products) { |p| p.id }
+  prop_collection(:orders) { |o| o.invoice_number }
 end
 ```
 
