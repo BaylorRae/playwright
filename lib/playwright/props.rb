@@ -6,7 +6,7 @@ module Playwright
       @include_query = include_query
     end
 
-    def find_or_add_by(item)
+    def find_or_add(item)
       self << item unless include?(item) || include_from_query?(item)
       item
     end
