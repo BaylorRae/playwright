@@ -35,7 +35,7 @@ stage = FulfillmentStage.new(:buyer)
 # scenes
 stage.scenes  #=> [PurchaseProduct, FulfillOrder]
 stage.current_scene #=> PurchaseProduct
-stage.fulfill_order!
+stage.next_scene
 stage.current_scene #=> FulfillOrder
 
 # actors
