@@ -33,10 +33,10 @@ by simply providing the initial actor, which in this case is the **buyer**.
 stage = FulfillmentStage.new(:buyer)
 
 # scenes
-stage.scenes  #=> [Scene(:purchase_product), Scene(:fulfill_order)]
-stage.current_scene #=> Scene(:purchase_product)
+stage.scenes  #=> [PurchaseProduct, FulfillOrder]
+stage.current_scene #=> PurchaseProduct
 stage.fulfill_order!
-stage.current_scene #=> Scene(:fulfill_order)
+stage.current_scene #=> FulfillOrder
 
 # actors
 stage.actors #=> [:buyer, :seller, :fulfillment_agency]
