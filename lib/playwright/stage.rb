@@ -10,8 +10,7 @@ module Playwright
 
     def self.prop_collection(name, &block)
       define_method name do
-        props = Props.new(block)
-        props
+        Props.new(block)
       end
     end
   end
