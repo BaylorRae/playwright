@@ -45,6 +45,7 @@ stage.fulfillment_agency #=> FulfillmentAgency
 
 # props
 stage.products #=> [Product, Product, ...]
+stage.orders #=> [Order, Order, ...]
 ```
 
 The above code example is defined from the following.
