@@ -10,6 +10,13 @@ module Playwright
     context "find_or_add_by" do
       let(:users) { [double(:bob, name: "bob"), double(:alice, name: "alice"), double(:leo, name: "leo")] }
 
+      let :user_props do
+        props = Props.new
+        users.each { |u| props << u }
+        props.include_query = -> (u) { u.name }
+        props
+      end
+
       it "adds an item that doesn't exist" do
         subject.find_or_add_by("one")
         expect(subject).to eq(["one"])
@@ -26,13 +33,15 @@ module Playwright
         expect(subject.find_or_add_by("two")).to eq("two")
       end
 
-      it "finds an item from an expression" do
-        users.each { |u| subject << u }
+      it "matches based on custom expression" do
+        marvin = double(:marvin, name: "marvin")
+        user_props.find_or_add_by(marvin)
+        expect(user_props).to eq(users << marvin)
+      end
 
-        subject.include_query = Proc.new { |a, b| a.name == b.name }
-        subject.find_or_add_by(double(:duplicate_alice, name: "alice"))
-
-        expect(subject).to eq(users)
+      it "doesn't duplicate from custom expression" do
+        user_props.find_or_add_by(double(:duplicate_alice, name: "alice"))
+        expect(user_props).to eq(users)
       end
     end
 

@@ -10,7 +10,7 @@ module Playwright
     private
 
     def include_from_query?(item)
-      include_query && self.any? { |v| include_query.call(v, item) }
+      include_query && self.any? { |v| include_query.call(v) == include_query.call(item) }
     end
   end
 end

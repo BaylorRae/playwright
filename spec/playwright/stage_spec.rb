@@ -5,7 +5,7 @@ module Playwright
 
     class ExampleStage < Stage
       prop_collection :shoes
-      prop_collection :pets, proc { |a, b| a.name == b.name }
+      prop_collection(:pets) { |p| p.name }
     end
 
     subject { ExampleStage.new }
@@ -30,7 +30,8 @@ module Playwright
       end
 
       it "assigns a custom query" do
-        expect(subject.pets.include_query).to_not be_nil
+        pet = double(:pet, name: "pet-1")
+        expect(subject.pets.include_query.call(pet)).to eq('pet-1')
       end
     end
 
