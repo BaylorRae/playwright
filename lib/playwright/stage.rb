@@ -6,12 +6,14 @@ module Playwright
     include DSL
 
     def method_missing(name, *args)
-      return @@actors[name] if @@actors.has_key?(name)
+      return @@actors[name].call if @@actors.has_key?(name)
       super
     end
 
     def actors
-      @@actors.values
+      @actors ||= @@actors.values.map do |actor|
+        actor.call
+      end
     end
 
     def self.actors(&block)

@@ -2,23 +2,16 @@ require "spec_helper"
 
 module Playwright
   describe Stage do
-    class UserFinder
-      def self.bob
-        @bob ||= Class.new
-      end
-
-      def self.alice
-        @alice ||= Class.new
-      end
-    end
+    BOB = Class.new
+    ALICE = Class.new
 
     class Scene1 < Playwright::Scene; end
     class Scene2 < Playwright::Scene; end
 
     class ExampleStage < Stage
       actors do
-        actor(:actor_1) { UserFinder.bob }
-        actor(:actor_2) { UserFinder.alice }
+        actor(:actor_1) { BOB }
+        actor(:actor_2) { ALICE }
       end
 
       scenes do
@@ -34,11 +27,11 @@ module Playwright
 
     context "actors" do
       it "returns available actors" do
-        expect(subject.actors).to eq([UserFinder.bob, UserFinder.alice])
+        expect(subject.actors).to eq([BOB, ALICE])
       end
 
       it "adds an accessor for the actor" do
-        expect(subject.actor_1).to eq(UserFinder.bob)
+        expect(subject.actor_1).to eq(BOB)
       end
     end
 

@@ -20,7 +20,7 @@ module Playwright
       end
 
       def actor(name, &block)
-        @actors[name] = yield
+        @actors[name] = block
       end
     end
   end
