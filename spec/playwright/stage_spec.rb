@@ -12,10 +12,18 @@ module Playwright
       end
     end
 
+    class Scene1 < Playwright::Scene; end
+    class Scene2 < Playwright::Scene; end
+
     class ExampleStage < Stage
       actors do
         actor(:actor_1) { UserFinder.bob }
         actor(:actor_2) { UserFinder.alice }
+      end
+
+      scenes do
+        scene Scene1, from: :actor_1, to: :actor_2
+        scene Scene2, from: :actor_2, to: :actor_1
       end
 
       prop_collection :shoes
@@ -36,15 +44,28 @@ module Playwright
 
     context "scenes" do
       it "has a collection of scenes" do
-        expect(subject.scenes).to eq([])
+        expect(subject.scenes).to eq([
+          Scene1.new(subject.actor_1, subject.actor_2),
+          Scene2.new(subject.actor_2, subject.actor_1)
+        ])
+      end
+    end
+
+    context "current_scene" do
+      it "gets the current scene" do
+        expect(subject.current_scene).to eq(Scene1.new(subject.actor_1, subject.actor_2))
+      end
+    end
+
+    context "next_scene" do
+      it "changes to the next scene" do
+        subject.next_scene
+        expect(subject.current_scene).to eq(Scene2.new(subject.actor_2, subject.actor_1))
       end
 
-      it "adds a scene" do
-        subject.add_scene("from-user", "to-user")
-
-        expect(subject.scenes).to eq([
-          Scene.new("from-user", "to-user")
-        ])
+      it "doesn't change past the last scene" do
+        2.times { subject.next_scene }
+        expect(subject.current_scene).to eq(Scene2.new(subject.actor_2, subject.actor_1))
       end
     end
 
