@@ -6,10 +6,7 @@ module Playwright
     include DSL
 
     def method_missing(name, *args)
-      if @@actors.has_key?(name)
-        return @@actors[name]
-      end
-
+      return @@actors[name] if @@actors.has_key?(name)
       super
     end
 
