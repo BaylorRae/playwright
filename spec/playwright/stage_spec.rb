@@ -72,6 +72,5 @@ module Playwright
         expect(subject.pets.include_query.call(pet)).to eq('pet-1')
       end
     end
-
   end
 end
