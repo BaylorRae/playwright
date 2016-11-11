@@ -1,19 +1,21 @@
-require "playwright/dsl/actor_dsl"
-require "playwright/dsl/scene_dsl"
+require 'playwright/dsl/actor_dsl'
+require 'playwright/dsl/scene_dsl'
 
 module Playwright
   class Stage
     include DSL
 
     def method_missing(name, *args)
-      return @@actors[name].call if @@actors.has_key?(name)
+      return @@actors[name].call if @@actors.key?(name)
       super
     end
 
+    def respond_to_missing?(name, _)
+      @@actors.key?(name)
+    end
+
     def actors
-      @actors ||= @@actors.values.map do |actor|
-        actor.call
-      end
+      @actors ||= @@actors.values.map(&:call)
     end
 
     def self.actors(&block)

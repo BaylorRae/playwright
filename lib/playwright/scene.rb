@@ -1,5 +1,5 @@
 module Playwright
-  class Scene < Struct.new(:sender, :receiver)
+  Scene = Struct.new(:sender, :receiver) do
     def self.sender_accessor(name)
       define_method(name, instance_method(:sender))
     end

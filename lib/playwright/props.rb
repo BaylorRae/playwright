@@ -16,7 +16,7 @@ module Playwright
     def include_from_query?(item)
       return if include_query.nil?
       item_value = include_query.call(item)
-      self.any? { |v| include_query.call(v) == item_value }
+      any? { |v| include_query.call(v) == item_value }
     end
   end
 end
