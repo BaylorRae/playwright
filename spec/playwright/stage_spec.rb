@@ -68,8 +68,7 @@ module Playwright
       end
 
       it "assigns a custom query" do
-        pet = double(:pet, name: "pet-1")
-        expect(subject.pets.include_query.call(pet)).to eq('pet-1')
+        expect(subject.pets.include_query).to_not be_nil
       end
     end
   end
