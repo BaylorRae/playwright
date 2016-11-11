@@ -26,11 +26,8 @@ agencies**. We need to create a test around fulfilling an order. You can teach
 Playwright how to group actors together as **buyer** will only interact with
 **seller** and **seller** will only interact with the **fulfillment agency**.
 
-With Playwright you can build the entire `Stage` with all the expected `Scene`s
-by simply providing the initial actor, which in this case is the **buyer**.
-
 ```ruby
-stage = FulfillmentStage.new(:buyer)
+stage = FulfillmentStage.new
 
 # scenes
 stage.scenes  #=> [PurchaseProduct, FulfillOrder]
