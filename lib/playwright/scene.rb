@@ -1,8 +1,9 @@
 module Playwright
   class Scene
-    attr_accessor :sender, :receiver
+    attr_accessor :stage, :sender, :receiver
 
-    def initialize(sender, receiver)
+    def initialize(stage, sender, receiver)
+      @stage = stage
       @sender = sender
       @receiver = receiver
     end
@@ -15,9 +16,9 @@ module Playwright
       define_method(name, instance_method(:receiver))
     end
 
-    def ==(other)
+    def ==(other) # :nodoc:
       return false unless other.is_a?(Scene)
-      sender == other.sender && receiver == other.receiver
+      stage == other.stage && sender == other.sender && receiver == other.receiver
     end
   end
 end

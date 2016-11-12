@@ -4,13 +4,14 @@ module Playwright
   describe Scene do
     let(:sender) { double(:sender) }
     let(:receiver) { double(:receiver) }
+    let(:stage) { double(:stage) }
 
     class ExampleScene < Scene
       sender_accessor :example_sender
       receiver_accessor :example_receiver
     end
 
-    subject { ExampleScene.new(sender, receiver) }
+    subject { ExampleScene.new(stage, sender, receiver) }
 
     context "sender_accessor" do
       it "aliases the sender method" do
@@ -25,13 +26,29 @@ module Playwright
     end
 
     context "==" do
-      it "compares sender and receiver" do
-        otherScene = ExampleScene.new(sender, receiver)
+      let(:otherScene) { Scene.new(subject.stage, sender, receiver) }
+
+      it "should match identical object" do
         expect(subject == otherScene).to be_truthy
       end
 
+      it "compares stages" do
+        otherScene.stage = Stage.new
+        expect(subject == otherScene).to be_falsey
+      end
+
+      it "compares sender" do
+        otherScene.sender = double(:sender)
+        expect(subject == otherScene).to be_falsey
+      end
+
+      it "compares receiver" do
+        otherScene.receiver = double(:receiver)
+        expect(subject == otherScene).to be_falsey
+      end
+
       it "checks for same type" do
-        expect(subject == ExampleScene.new(1, 2)).to be_falsey
+        expect(subject == double(:scene, stage: subject.stage, sender: sender, receiver: receiver)).to be_falsey
       end
     end
   end

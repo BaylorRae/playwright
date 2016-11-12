@@ -24,7 +24,7 @@ module Playwright
 
     def scenes
       @scenes ||= @@scenes.map do |scene|
-        scene.klass.new(send(scene.from), send(scene.to))
+        scene.klass.new(self, send(scene.from), send(scene.to))
       end
     end
 
