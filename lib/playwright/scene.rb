@@ -1,6 +1,7 @@
 module Playwright
   class Scene
-    attr_accessor :stage, :sender, :receiver
+    attr_reader :stage
+    attr_accessor :sender, :receiver
 
     def initialize(stage, sender, receiver)
       @stage = stage

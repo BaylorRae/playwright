@@ -33,7 +33,7 @@ module Playwright
       end
 
       it "compares stages" do
-        otherScene.stage = Stage.new
+        allow(otherScene).to receive(:stage) { Stage.new }
         expect(subject == otherScene).to be_falsey
       end
 
