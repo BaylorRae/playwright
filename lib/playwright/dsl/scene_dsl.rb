@@ -37,8 +37,8 @@ module Playwright
         if klass.kind_of?(Class)
           accessor = klass.name.demodulize.underscore
         else
-          accessor = klass
-          klass = accessor.to_s.camelize.constantize
+          accessor = klass.to_s
+          klass = accessor.camelize.constantize
         end
 
         @scenes[accessor] = SceneWithActors.new(klass, options[:from], options[:to])

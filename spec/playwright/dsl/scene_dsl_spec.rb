@@ -29,7 +29,7 @@ module Playwright
         it "adds scene from symbol" do
           subject.scene(:example_scene, from: sender, to: receiver)
           expect(subject.scenes).to eq({
-            example_scene: SceneDSL::SceneWithActors.new(ExampleScene, sender, receiver)
+            "example_scene" => SceneDSL::SceneWithActors.new(ExampleScene, sender, receiver)
           })
         end
       end
