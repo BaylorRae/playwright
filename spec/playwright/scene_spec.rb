@@ -6,21 +6,22 @@ module Playwright
     let(:receiver) { double(:receiver) }
     let(:stage) { double(:stage) }
 
-    class ExampleScene < Scene
-      sender_accessor :example_sender
-      receiver_accessor :example_receiver
+    before do
+      stub_const('ExampleScene', Scene)
     end
 
     subject { ExampleScene.new(stage, sender, receiver) }
 
     context "sender_accessor" do
       it "aliases the sender method" do
+        ExampleScene.class_eval { sender_accessor :example_sender }
         expect(subject.example_sender).to eq(sender)
       end
     end
 
     context "receiver_accessor" do
       it "aliases the receiver method" do
+        ExampleScene.class_eval { receiver_accessor :example_receiver }
         expect(subject.example_receiver).to eq(receiver)
       end
     end
