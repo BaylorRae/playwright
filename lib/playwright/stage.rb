@@ -73,11 +73,12 @@ module Playwright
 
     def method_missing(name, *args) # :nodoc:
       return @@actors[name].call if @@actors.key?(name)
+      return @@scenes[name.to_s].init(self) if @@scenes.key?(name.to_s)
       super
     end
 
     def respond_to_missing?(name, _) # :nodoc:
-      @@actors.key?(name)
+      @@actors.key?(name) || @@scenes.key?(name.to_s)
     end
 
     def actors
@@ -89,19 +90,9 @@ module Playwright
     end
 
     def scenes
-      @scenes ||= @@scenes.map do |scene|
-        scene.klass.new(self, send(scene.from), send(scene.to))
+      @scenes ||= @@scenes.values.map do |scene|
+        scene.init(self)
       end
-    end
-
-    def current_scene
-      @current_scene ||= scenes.first
-    end
-
-    def next_scene
-      next_index = scenes.index(current_scene) + 1
-      return if next_index > scenes.length - 1
-      @current_scene = scenes[next_index]
     end
 
     def self.scenes(&block) # :nodoc:

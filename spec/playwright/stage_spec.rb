@@ -2,25 +2,27 @@ require "spec_helper"
 
 module Playwright
   describe Stage do
-    BOB = Class.new
-    ALICE = Class.new
+    before do
+      stub_const('BOB', Class.new)
+      stub_const('ALICE', Class.new)
+      stub_const('Scene1', Scene)
+      stub_const('Scene2', Scene)
+      stub_const('ExampleStage', Stage)
 
-    class Scene1 < Playwright::Scene; end
-    class Scene2 < Playwright::Scene; end
+      ExampleStage.class_eval do
+        actors do
+          actor(:actor_1) { BOB }
+          actor(:actor_2) { ALICE }
+        end
 
-    class ExampleStage < Stage
-      actors do
-        actor(:actor_1) { BOB }
-        actor(:actor_2) { ALICE }
+        scenes do
+          scene :scene1, from: :actor_1, to: :actor_2
+          scene :scene2, from: :actor_2, to: :actor_1
+        end
+
+        prop_collection :shoes
+        prop_collection(:pets) { |p| p.name }
       end
-
-      scenes do
-        scene Scene1, from: :actor_1, to: :actor_2
-        scene Scene2, from: :actor_2, to: :actor_1
-      end
-
-      prop_collection :shoes
-      prop_collection(:pets) { |p| p.name }
     end
 
     subject { ExampleStage.new }
@@ -42,23 +44,9 @@ module Playwright
           Scene2.new(subject, subject.actor_2, subject.actor_1)
         ])
       end
-    end
 
-    context "current_scene" do
-      it "gets the current scene" do
-        expect(subject.current_scene).to eq(Scene1.new(subject, subject.actor_1, subject.actor_2))
-      end
-    end
-
-    context "next_scene" do
-      it "changes to the next scene" do
-        subject.next_scene
-        expect(subject.current_scene).to eq(Scene2.new(subject, subject.actor_2, subject.actor_1))
-      end
-
-      it "doesn't change past the last scene" do
-        2.times { subject.next_scene }
-        expect(subject.current_scene).to eq(Scene2.new(subject, subject.actor_2, subject.actor_1))
+      it "creates a method to access the scene" do
+        expect(subject.scene1).to eq(Scene1.new(subject, subject.actor_1, subject.actor_2))
       end
     end
 

@@ -17,7 +17,11 @@ module Playwright
     #   end
     class SceneDSL
       attr_reader :scenes
-      SceneWithActors = Struct.new(:klass, :from, :to)
+      SceneWithActors = Struct.new(:klass, :from, :to) do
+        def init(stage)
+          klass.new(stage, stage.send(from), stage.send(to))
+        end
+      end
 
       def initialize # :nodoc:
         @scenes = {}
