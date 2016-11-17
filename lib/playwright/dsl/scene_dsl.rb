@@ -1,4 +1,5 @@
 require 'active_support/inflector'
+require 'active_support/hash_with_indifferent_access'
 
 module Playwright
   module DSL
@@ -18,13 +19,13 @@ module Playwright
     class SceneDSL
       attr_reader :scenes
       SceneWithActors = Struct.new(:klass, :from, :to) do
-        def init(stage)
-          klass.new(stage, stage.send(from), stage.send(to))
+        def init(narrator, stage)
+          klass.new(stage, narrator.get_actor(from), narrator.get_actor(to))
         end
       end
 
       def initialize # :nodoc:
-        @scenes = {}
+        @scenes = ::ActiveSupport::HashWithIndifferentAccess.new
       end
 
       def self.find(&block) # :nodoc:

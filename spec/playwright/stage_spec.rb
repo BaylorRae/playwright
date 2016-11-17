@@ -3,13 +3,16 @@ require "spec_helper"
 module Playwright
   describe Stage do
     before do
-      stub_const('BOB', Class.new)
-      stub_const('ALICE', Class.new)
+      stub_const('BOB', double(:bob))
+      stub_const('ALICE', double(:alice))
       stub_const('Scene1', Scene)
       stub_const('Scene2', Scene)
       stub_const('ExampleStage', Stage)
 
-      ExampleStage.class_eval do
+      class Scene1 < Scene; end
+      class Scene2 < Scene; end
+
+      class ExampleStage < Stage
         actors do
           actor(:actor_1) { BOB }
           actor(:actor_2) { ALICE }
@@ -17,7 +20,7 @@ module Playwright
 
         scenes do
           scene :scene1, from: :actor_1, to: :actor_2
-          scene :scene2, from: :actor_2, to: :actor_1
+          scene Scene2, from: :actor_2, to: :actor_1
         end
 
         prop_collection :shoes
@@ -25,11 +28,18 @@ module Playwright
       end
     end
 
+    after do
+      ExampleStage.narrators.clear
+    end
+
     subject { ExampleStage.new }
 
     context "actors" do
       it "returns available actors" do
-        expect(subject.actors).to eq([BOB, ALICE])
+        expect(subject.actors).to eq({
+          "actor_1" => BOB,
+          "actor_2" => ALICE
+        })
       end
 
       it "adds an accessor for the actor" do
@@ -39,10 +49,10 @@ module Playwright
 
     context "scenes" do
       it "has a collection of scenes" do
-        expect(subject.scenes).to eq([
-          Scene1.new(subject, subject.actor_1, subject.actor_2),
-          Scene2.new(subject, subject.actor_2, subject.actor_1)
-        ])
+        expect(subject.scenes).to eq({
+          "scene1" => Scene1.new(subject, BOB, ALICE),
+          "scene2" => Scene2.new(subject, ALICE, BOB)
+        })
       end
 
       it "creates a method to access the scene" do

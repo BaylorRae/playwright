@@ -1,6 +1,3 @@
-require 'playwright/dsl/actor_dsl'
-require 'playwright/dsl/scene_dsl'
-
 module Playwright
   # == Playwright::Stage
   #
@@ -69,40 +66,38 @@ module Playwright
   #       prop_collection(:fulfillments) { |f| f.id }
   #     end
   class Stage
-    include DSL
 
-    def method_missing(name, *args) # :nodoc:
-      return @@actors[name].call if @@actors.key?(name)
-      return @@scenes[name.to_s].init(self) if @@scenes.key?(name.to_s)
+    def method_missing(name, *args, &block)
+      narrator = self.class.narrator
+      return narrator.get_actor(name) if narrator.has_actor?(name)
+      return narrator.get_scene(self, name) if narrator.has_scene?(self, name)
       super
     end
 
-    def respond_to_missing?(name, _) # :nodoc:
-      @@actors.key?(name) || @@scenes.key?(name.to_s)
-    end
-
     def actors
-      @actors ||= @@actors.values.map(&:call)
-    end
-
-    def self.actors(&block) # :nodoc:
-      @@actors = ActorDSL.find(&block)
+      self.class.narrator.actors
     end
 
     def scenes
-      @scenes ||= @@scenes.values.map do |scene|
-        scene.init(self)
-      end
+      self.class.narrator.scenes(self)
     end
 
-    def self.scenes(&block) # :nodoc:
-      @@scenes = SceneDSL.find(&block)
+    def self.actors(&block)
+      narrator.add_actors(&block)
+    end
+
+    def self.scenes(&block)
+      narrator.add_scenes(&block)
     end
 
     def self.prop_collection(name, &block)
       define_method name do
         Props.new(block)
       end
+    end
+
+    def self.narrator
+      Narrator.find_or_create(self)
     end
   end
 end

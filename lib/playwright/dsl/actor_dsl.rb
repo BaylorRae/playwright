@@ -1,3 +1,5 @@
+require 'active_support/hash_with_indifferent_access'
+
 module Playwright
   module DSL
     # Defines an actor in a stage. The block is only evaluated once when the
@@ -8,27 +10,15 @@ module Playwright
     #       actor(:actor_name) { User.first! }
     #     end
     #   end
-    class ActorDSL
+    class ActorDSL < BasicObject
       attr_reader :actors
 
-      def initialize(context) # :nodoc:
-        @context = context
-        @actors = {}
-      end
-
-      def method_missing(name, *args, &block) # :nodoc:
-        @context.send(name, args, &block)
-      rescue NoMethodError
-        super
-      end
-
-      def respond_to_missing?(name, include_private) # :nodoc:
-        @context.respond_to?(name, include_private)
+      def initialize
+        @actors = ::ActiveSupport::HashWithIndifferentAccess.new
       end
 
       def self.find(&block) # :nodoc:
-        context = eval('self', block.binding)
-        dsl = new(context)
+        dsl = new
         dsl.instance_eval(&block)
         dsl.actors
       end
