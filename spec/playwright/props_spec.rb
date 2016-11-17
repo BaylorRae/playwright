@@ -12,7 +12,7 @@ module Playwright
 
       let :user_props do
         props = Props.new -> (u) { u.name }
-        users.each { |u| props << u }
+        props.concat(users)
         props
       end
 
@@ -22,13 +22,13 @@ module Playwright
       end
 
       it "doesn't add the item if already exists" do
-        %w[one two three].each { |i| subject << i }
+        subject.push("one", "two", "three")
         subject.find_or_add("two")
         expect(subject).to eq(%w[one two three])
       end
 
       it "returns the value being passed in" do
-        %w[one two three].each { |i| subject << i }
+        subject.push("one", "two", "three")
         expect(subject.find_or_add("two")).to eq("two")
       end
 
