@@ -1,5 +1,4 @@
 require "spec_helper"
-require 'pry'
 
 module Playwright
   describe Narrator do
