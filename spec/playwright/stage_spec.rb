@@ -69,5 +69,13 @@ module Playwright
         expect(subject.pets.include_query).to_not be_nil
       end
     end
+
+    context "method_missing" do
+      it "raises an exception if no actors or scenes are found" do
+        expect do
+          subject.foobar
+        end.to raise_error(NoMethodError)
+      end
+    end
   end
 end
