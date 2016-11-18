@@ -1,6 +1,5 @@
 require 'playwright/dsl/actor_dsl'
 require 'playwright/dsl/scene_dsl'
-require 'playwright/extensions'
 
 module Playwright
   class Narrator

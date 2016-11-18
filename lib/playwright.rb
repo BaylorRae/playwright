@@ -7,4 +7,5 @@ module Playwright
   autoload :Narrator, 'playwright/narrator'
   autoload :ActorNotRegistered, 'playwright/errors'
   autoload :SceneNotRegistered, 'playwright/errors'
+  autoload :ClassMethods, 'playwright/extensions'
 end
