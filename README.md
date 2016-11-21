@@ -1,6 +1,6 @@
 # Playwright
 
-[![Build Status](https://travis-ci.org/BaylorRae/playwright.svg?branch=master)](https://travis-ci.org/BaylorRae/playwright) [![Code Climate](https://codeclimate.com/repos/582e4cebfbcdbd008100254f/badges/72a4dd00afa4dbc0b174/gpa.svg)](https://codeclimate.com/repos/582e4cebfbcdbd008100254f/feed) [![Test Coverage](https://codeclimate.com/repos/582e4cebfbcdbd008100254f/badges/72a4dd00afa4dbc0b174/coverage.svg)](https://codeclimate.com/repos/582e4cebfbcdbd008100254f/coverage)
+[![Build Status](https://travis-ci.org/BaylorRae/playwright.svg?branch=master)](https://travis-ci.org/BaylorRae/playwright) [![Code Climate](https://codeclimate.com/github/BaylorRae/playwright/badges/gpa.svg)](https://codeclimate.com/github/BaylorRae/playwright) [![Test Coverage](https://codeclimate.com/github/BaylorRae/playwright/badges/coverage.svg)](https://codeclimate.com/github/BaylorRae/playwright/coverage)
 
 Playwright is a foundational piece for building a test framework. It allows
 test cases to be written as a play with all the moving parts to be categorized
