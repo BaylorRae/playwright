@@ -68,6 +68,21 @@ module Playwright
       it "assigns a custom query" do
         expect(subject.pets.include_query).to_not be_nil
       end
+
+      it "doesn't lose the existing prop collection" do
+        subject.shoes.find_or_add('blue')
+        subject.shoes.find_or_add('red')
+        subject.shoes.find_or_add('blue')
+
+        expect(subject.shoes).to eq(%w[blue red])
+      end
+
+      it "doesn't let props overwrite each other" do
+        subject.shoes.find_or_add('blue')
+        subject.pets.find_or_add(double(name: 'blue'))
+
+        expect(subject.shoes).to eq(%w[blue])
+      end
     end
 
     context "method_missing" do

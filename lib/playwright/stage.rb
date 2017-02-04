@@ -92,7 +92,8 @@ module Playwright
 
     def self.prop_collection(name, &block)
       define_method name do
-        Props.new(block)
+        @props ||= {}
+        @props[name] ||= Props.new(block)
       end
     end
 
